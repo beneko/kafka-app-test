@@ -6,6 +6,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ConsumerApp {
     public static void main(String[] args) {
@@ -17,24 +19,25 @@ public class ConsumerApp {
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         properties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
         properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
-        properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
 
-        KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
         consumer.subscribe(Collections.singletonList("test-topic-1"));
 
         // This is a way to poll the messages in a scheduled way
 //        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-//            ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(1000));
-//            for (ConsumerRecord<Integer, String> record : records) {
+//            System.out.println("------------Polling messages-------------");
+//            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+//            for (ConsumerRecord<String, String> record : records) {
 //                System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset());
 //            }
-//        }, 0, 1, java.util.concurrent.TimeUnit.SECONDS );
+//        }, 1000, 1000, TimeUnit.MILLISECONDS );
 
         // This is a way to poll the messages in a loop
         try {
             while (true) {
-                ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(1000));
-                for (ConsumerRecord<Integer, String> record : records) {
+                System.out.println("------------Polling messages-------------");
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+                for (ConsumerRecord<String, String> record : records) {
                     System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset());
                 }
             }
