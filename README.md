@@ -19,6 +19,12 @@ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 -
 ### windows : 
 bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test-topic-1
 
+## list all topics
+### linux :
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+### windows :
+bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+
 # create a consumer
 ### linux : 
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic-1 --from-beginning
